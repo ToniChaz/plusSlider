@@ -1,7 +1,6 @@
-plusSlider
+plusSlider v1.0
 Toni Chaz
-tonichaz.com
-v 1.0
+www.tonichaz.com
 ==========
 
 This is a slider of images made with jQuery 1.9.1.
