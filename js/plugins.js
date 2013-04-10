@@ -27,16 +27,6 @@
     $.fn.PlusSlider = function(auto){
         var slider = {};
 
-        slider = jQuery(this)[0];
-        slider.ul = $('ul', this);
-        slider.li = slider.ul.find('li');
-        slider.nu = slider.li.length;
-        slider.inc = slider.ul.find('li').outerWidth();
-        console.log(slider.inc);
-        slider.pres = 0;
-        slider.height = 0;
-        slider.width = 0;
-
         for(i=0; i<slider.nu; i++){
             var w = $(slider.li[i]).width();
             var h = $(slider.li[i]).height();
