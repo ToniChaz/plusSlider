@@ -24,15 +24,14 @@
 // Place any jQuery/helper plugins in here.
 // Slider plugin
 (function($){
-    $.fn.PlusSlider = function(auto){
+    $.fn.PlusSlider = function(){
         var slider = {};
 
         slider = jQuery(this)[0];
         slider.ul = $('ul', this);
         slider.li = slider.ul.find('li');
         slider.nu = slider.li.length;
-        slider.inc = slider.ul.find('li').outerWidth();
-        console.log(slider.inc);
+        //slider.inc = slider.ul.find('li').outerWidth();        
         slider.pres = 0;
         slider.height = 0;
         slider.width = 0;
@@ -49,14 +48,14 @@
         });
         for(i=0; i<slider.nu; i++){
             var sl = $(slider.li[i]);
-            sl.attr('class', 'slider' +i);
+            sl.attr('class', 'slider' +[i+1]);
             sl.css({
                 left: slider.width * i
             });
         }
         slider.go = function(where) {
             if(where == 'next'){
-                slider.pres = (slider.pres < slider.nu-1) ? slider.pres*1 + 1 : 0;
+                slider.pres = (slider.pres < slider.nu-1) ? slider.pres + 1 : 0;
             } else if(where == 'prev') {
                 slider.pres = (slider.pres > 0) ? slider.pres -1 : slider.nu -1;
             } else {
@@ -66,22 +65,45 @@
                 var sl = $(slider.li[i]);
                 sl.animate({
                     left: slider.width * (i - slider.pres)
-                },100);
+                },100);       
             }
+            //$('slider' + slider.pres).addClass('active');
+            //if (slider.li == slider.pres)
+            
+            //$(this).addClass('active');
+            //else
+            //$(this).removeClass('active');
+
         }
+
         $(".next").click(function () {
           slider.go('next');
           return false; 
         });
+
         $(".prev").click(function () {
           slider.go('prev');
           return false; 
         });
-        var auto;
-        if(auto){
-            var autoSlider = setInterval(function () {
-                slider.go('next');
-            },10*1000);
-        }
+
+        var autoSlider = setInterval(function(){
+            slider.go('next');
+        },10000);
+
+        var pagination = '<ul class="sliderNav">';        
+            for(i=0; i<slider.nu; i++){
+                var activeClass = (i == 0) ? 'class="active"' : '';
+                pagination += '<li ' + activeClass + '><a href="#">Slider' + [i+1] + '</a></li>';
+            }
+            pagination += '</ul>'; 
+
+        $(slider).append(pagination);
     }
 })(jQuery);
+
+
+
+
+
+
+

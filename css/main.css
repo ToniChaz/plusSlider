@@ -171,9 +171,23 @@ nav a:hover {
 .plusSlider ul li{
     list-style-type: none;
     position: absolute;;
-    
 }
-
+ul.sliderNav {
+    bottom: -43px;
+    width: auto;
+    position: absolute;
+}
+ul.sliderNav li {
+    float: left;
+    position: relative;
+    margin-left: 5px;
+}
+ul.sliderNav li.active {
+    background: red;
+}
+ul.sliderNav li.active a{
+    color: #fff;
+}
 /* ==========================================================================
    Media Queries
    ========================================================================== */
