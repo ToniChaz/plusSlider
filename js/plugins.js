@@ -53,27 +53,20 @@
                 left: slider.width * i
             });
         }
-        slider.go = function(where) {
+        slider.go = function(where) {            
             if(where == 'next'){
-                slider.pres = (slider.pres < slider.nu-1) ? slider.pres + 1 : 0;
+                slider.pres = (slider.pres < slider.nu-1) ? slider.pres + 1 : 0;            
             } else if(where == 'prev') {
                 slider.pres = (slider.pres > 0) ? slider.pres -1 : slider.nu -1;
             } else {
-                slider.pres = where;
+                slider.pres = eval(where);
             }
             for(i=0; i<slider.nu; i++){
                 var sl = $(slider.li[i]);
                 sl.animate({
                     left: slider.width * (i - slider.pres)
-                },100);       
+                },100);    
             }
-            //$('slider' + slider.pres).addClass('active');
-            //if (slider.li == slider.pres)
-            
-            //$(this).addClass('active');
-            //else
-            //$(this).removeClass('active');
-
         }
 
         $(".next").click(function () {
@@ -88,16 +81,25 @@
 
         var autoSlider = setInterval(function(){
             slider.go('next');
-        },10000);
+        },3000);
 
         var pagination = '<ul class="sliderNav">';        
             for(i=0; i<slider.nu; i++){
-                var activeClass = (i == 0) ? 'class="active"' : '';
-                pagination += '<li ' + activeClass + '><a href="#">Slider' + [i+1] + '</a></li>';
+                var activeClass = (i == 0) ? 'active' : '';
+                pagination += '<li class="' + activeClass + '"><a href="#" class="slide-' +(i) + '">'+ (i+1) +'</a></li>';
             }
             pagination += '</ul>'; 
 
         $(slider).append(pagination);
+
+        $('ul.sliderNav li a').click(function() {
+            var goTo = $(this).attr('class').substring(6);
+            slider.go(goTo);
+            $(this).parent().parent().find("li").attr("class","");
+            $(this).parent().attr("class","active");
+            return false;
+        });
+        
     }
 })(jQuery);
 
