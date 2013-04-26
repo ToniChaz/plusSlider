@@ -25,82 +25,89 @@
 // Slider plugin
 (function($){
     $.fn.PlusSlider = function(){
-        var slider = {};
+        this.each(function(){
+            var slider = {}, nextMov;
 
-        slider = jQuery(this)[0];
-        slider.ul = $('ul', this);
-        slider.li = slider.ul.find('li');
-        slider.nu = slider.li.length;
-        //slider.inc = slider.ul.find('li').outerWidth();        
-        slider.pres = 0;
-        slider.height = 0;
-        slider.width = 0;
+            slider = jQuery(this);        
+            slider.ul = slider.find('ul');
+            slider.li = slider.ul.find('li');
+            slider.nu = slider.li.length;
+            //slider.inc = slider.ul.find('li').outerWidth();        
+            slider.pres = 0;
+            slider.height = 0;
+            slider.width = 0;
 
-        for(i=0; i<slider.nu; i++){
-            var w = $(slider.li[i]).width();
-            var h = $(slider.li[i]).height();
-            slider.height = (h > slider.height) ? h : slider.height;
-            slider.width = (w > slider.width) ? w : slider.width;
-        }
-        slider.ul.css({
-            width: slider.width,
-            height: slider.height
-        });
-        for(i=0; i<slider.nu; i++){
-            var sl = $(slider.li[i]);
-            sl.attr('class', 'slider' +[i+1]);
-            sl.css({
-                left: slider.width * i
-            });
-        }
-        slider.go = function(where) {            
-            if(where == 'next'){
-                $('.sliderNav li', this).removeClass('active');
-                slider.pres = (slider.pres < slider.nu-1) ? slider.pres + 1 : 0;
-                $('.sliderNav li.sliderLi-' + slider.pres).addClass('active');
-                
-            } else if(where == 'prev') {
-                slider.pres = (slider.pres > 0) ? slider.pres -1 : slider.nu -1;
-            } else {
-                slider.pres = eval(where);
+            for(i=0; i<slider.nu; i++){
+                var w = $(slider.li[i]).width();
+                var h = $(slider.li[i]).height();
+                slider.height = (h > slider.height) ? h : slider.height;
+                slider.width = (w > slider.width) ? w : slider.width;
             }
+            slider.ul.css({
+                width: slider.width,
+                height: slider.height
+            });
             for(i=0; i<slider.nu; i++){
                 var sl = $(slider.li[i]);
-                sl.animate({
-                    left: slider.width * (i - slider.pres)
-                },100);    
+                sl.attr('class', 'slider' +[i+1]);
+                sl.css({
+                    left: slider.width * i
+                });
             }
-        }
-
-        $(".next").click(function () {
-          slider.go('next');
-          return false; 
-        });
-
-        $(".prev").click(function () {
-          slider.go('prev');
-          return false; 
-        });
-
-        var autoSlider = setInterval(function(){
-            slider.go('next');
-        },3000);
-
-        var pagination = '<ul class="sliderNav">';        
-            for(i=0; i<slider.nu; i++){
-                var activeClass = (i == 0) ? 'active' : '';
-                pagination += '<li class="sliderLi-' + (i) + ' ' + activeClass + '"><a href="#" class="slide-' +(i) + '">'+ (i+1) +'</a></li>';
+            slider.go = function(where) {            
+                if(where == 'next'){
+                    slider.find('.sliderNav li', this).removeClass('active');
+                    slider.pres = (slider.pres < slider.nu-1) ? slider.pres + 1 : 0;
+                    slider.find('.sliderNav li.sliderLi-' + slider.pres).addClass('active');
+                    
+                } else if(where == 'prev') {
+                    slider.find('.sliderNav li', this).removeClass('active');
+                    slider.pres = (slider.pres > 0) ? slider.pres -1 : slider.nu -1;
+                    slider.find('.sliderNav li.sliderLi-' + slider.pres).addClass('active');
+                } else {
+                    slider.pres = parseInt(where, 10);
+                }
+                for(i=0; i<slider.nu; i++){
+                    var sl = $(slider.li[i]);
+                    sl.animate({
+                        left: slider.width * (i - slider.pres)
+                    },100);    
+                }                
+                clearTimeout(nextMov);
+                nextMov = setTimeout(autoSlider, 3000);
             }
-            pagination += '</ul>'; 
+            
+            slider.find('.next').click(function() {
+              slider.go('next');
+              return false; 
+            });
 
-        $(slider).append(pagination);
+            slider.find('.prev').click(function() {
+              slider.go('prev');
+              return false; 
+            });
 
-        $('ul.sliderNav li a').click(function() {
-            var goTo = $(this).attr('class').substring(6);
-            slider.go(goTo);
-            $(this).parent().parent().find("li").removeClass('active');
-            $(this).parent().addClass('active');
-            return false;
+            var autoSlider = function(){
+                slider.go('next');
+            };
+            nextMov = setTimeout(autoSlider, 3000);
+
+            var pagination = '<ul class="sliderNav">';        
+                for(i=0; i<slider.nu; i++){
+                    var activeClass = (i == 0) ? 'active' : '';
+                    pagination += '<li class="sliderLi-' + (i) + ' ' + activeClass + '"><a href="#" data-slider-pos="' +(i) + '">'+ (i+1) +'</a></li>';
+                }
+                pagination += '</ul>'; 
+
+            $(slider).append(pagination);
+
+            slider.find('.sliderNav li a').click(function() {
+                var goTo = $(this).data('slider-pos');
+                slider.go(goTo);
+                $(this).parent().parent().find("li").removeClass('active');
+                $(this).parent().addClass('active');
+                return false;
+            });
         });        
     }
 })(jQuery);

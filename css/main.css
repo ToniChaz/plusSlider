@@ -156,6 +156,9 @@ nav a:hover {
 /* ==========================================================================
    Author's custom styles
    ========================================================================== */
+article{
+    margin: 25px auto;
+}
 /* Slider Home */
 .plusSlider {
     height:450px;    
@@ -171,6 +174,12 @@ nav a:hover {
 .plusSlider ul li{
     list-style-type: none;
     position: absolute;;
+}
+.center {
+    position: absolute;
+    bottom: -27px;
+    left: 50%;
+    margin-left: -64px;
 }
 ul.sliderNav {
     bottom: -43px;
